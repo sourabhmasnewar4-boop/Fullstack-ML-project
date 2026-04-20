@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | NeuroDetect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="bg-dark text-white">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg nav-glass fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold ms-3" href="#">Neuro<span class="text-accent">Detect</span></a>
+            <div class="d-flex me-3">
+                <span class="navbar-text me-3" id="userNameDisplay">Welcome, User</span>
+                <button class="btn btn-outline-light btn-sm" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5 pt-5 pb-5">
+        <h2 class="fw-bold mb-4">Patient Analysis Dashboard</h2>
+
+        <div class="row g-4">
+            <!-- Input Section -->
+            <div class="col-lg-6">
+                <div class="glass-panel p-4 dashboard-card h-100">
+                    <h4 class="text-accent mb-3"><i class="bi bi-activity"></i> Run New Analysis</h4>
+                    
+                    <ul class="nav nav-tabs custom-tabs mb-3" id="analysisTab" role="tablist">
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="text-tab" data-bs-toggle="tab" data-bs-target="#text-input" type="button" role="tab">Text Analysis</button>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="audio-tab" data-bs-toggle="tab" data-bs-target="#audio-input" type="button" role="tab">Speech Analysis</button>
+                      </li>
+                    </ul>
+
+                    <div class="tab-content" id="analysisTabContent">
+                      <!-- Text Input -->
+                      <div class="tab-pane fade show active" id="text-input" role="tabpanel">
+                          <form id="textForm">
+                              <div class="mb-3">
+                                  <label class="form-label text-secondary">Transcribed Speech or Written Text from Patient</label>
+                                  <textarea class="form-control glass-input" id="patientText" rows="5" required placeholder="Enter observed behaviors, patient statements, or transcribed dialogue..."></textarea>
+                              </div>
+                              <button type="submit" class="btn btn-accent w-100" id="textAnalyzeBtn">Analyze Text</button>
+                          </form>
+                      </div>
+                      
+                      <!-- Audio Input -->
+                      <div class="tab-pane fade" id="audio-input" role="tabpanel">
+                          <form id="audioForm">
+                              <div class="mb-3">
+                                  <label class="form-label text-secondary">Upload patient speech recording (.wav, .mp3)</label>
+                                  <input class="form-control glass-input" type="file" id="patientAudio" accept="audio/*" required>
+                              </div>
+                              <button type="submit" class="btn btn-accent w-100" id="audioAnalyzeBtn">Analyze Speech</button>
+                          </form>
+                      </div>
+                    </div>
+
+                    <!-- Loader & Result -->
+                    <div id="loader" class="text-center mt-4 d-none">
+                        <div class="spinner-border text-accent" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 text-secondary">Processing by Machine Learning Core...</p>
+                    </div>
+
+                    <div id="resultBox" class="mt-4 p-3 rounded glass-panel d-none">
+                        <h5 class="fw-bold mb-2">Analysis Complete</h5>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Risk Level:</span>
+                            <span class="badge fw-bold" id="riskBadge">Level</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Confidence Score:</span>
+                            <span id="confidenceScore" class="fw-bold text-accent">0%</span>
+                        </div>
+                        <hr class="border-secondary">
+                        <p id="recommendationText" class="small mb-0 text-secondary"></p>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- History Section -->
+            <div class="col-lg-6">
+                <div class="glass-panel p-4 dashboard-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="text-accent m-0"><i class="bi bi-clock-history"></i> Recent History</h4>
+                        <button class="btn btn-sm btn-outline-light" id="downloadPdfBtn"><i class="bi bi-file-pdf"></i> PDF Report</button>
+                    </div>
+                    
+                    <!-- Chart -->
+                    <div class="chart-container mb-4">
+                        <canvas id="historyChart"></canvas>
+                    </div>
+
+                    <!-- List -->
+                    <div style="max-height: 200px; overflow-y: auto;" class="pe-2" id="historyList">
+                        <!-- History items populated via JS -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Generate PDF hidden container -->
+    <div id="reportContainer" class="d-none bg-white text-dark p-5" style="width: 800px;">
+        <h2 class="text-primary mb-4">NeuroDetect Patient Analysis Report</h2>
+        <div class="row">
+            <div class="col-6"><strong>Patient/User ID:</strong> <span id="pdfUserId"></span></div>
+            <div class="col-6 text-end"><strong>Date:</strong> <span id="pdfDate"></span></div>
+        </div>
+        <hr>
+        <h4 class="mt-4">Analysis History Summary</h4>
+        <table class="table table-bordered mt-3 text-dark text-start" id="pdfTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Input Snippet</th>
+                    <th>Risk Level</th>
+                    <th>Confidence</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <p class="mt-5 text-muted small">Generated automatically by AI Schizophrenia Detection System</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

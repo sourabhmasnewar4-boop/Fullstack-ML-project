@@ -1,0 +1,149 @@
+/* Modern Custom CSS */
+:root {
+    --bg-dark: #0f172a;
+    --accent-color: #38bdf8;
+    --accent-hover: #0ea5e9;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    overflow-x: hidden;
+}
+
+/* Glassmorphism Styles */
+.glass-panel {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 1rem;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+.glass-input {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255,255,255,0.2) !important;
+    color: #fff !important;
+    border-radius: 0.5rem;
+}
+
+.glass-input:focus {
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.3) !important;
+    border-color: var(--accent-color) !important;
+}
+
+/* Typography & Colors */
+.text-accent {
+    color: var(--accent-color);
+}
+
+.btn-accent {
+    background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+    border: none;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-accent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3);
+    color: white;
+}
+
+/* Navbar */
+.nav-glass {
+    background: rgba(15, 23, 42, 0.8) !important;
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+/* Hero Section */
+.hero-section {
+    min-height: 100vh;
+    background: radial-gradient(circle at top right, #1e293b, var(--bg-dark));
+    position: relative;
+}
+
+.floating-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
+}
+
+.orb-1 {
+    width: 300px;
+    height: 300px;
+    background: var(--accent-color);
+    top: 20%;
+    left: 20%;
+    opacity: 0.2;
+    animation: float 6s ease-in-out infinite;
+}
+
+.orb-2 {
+    width: 400px;
+    height: 400px;
+    background: #818cf8;
+    bottom: -10%;
+    right: 10%;
+    opacity: 0.15;
+    animation: float 8s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(5deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+    animation: slideUp 1s ease-out forwards;
+}
+
+/* Auth Page specific */
+.auth-body {
+    min-height: 100vh;
+    background: radial-gradient(circle at bottom left, #1e293b, var(--bg-dark));
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-tabs .nav-link {
+    color: var(--text-secondary);
+    border-radius: 20px;
+    margin: 0 5px;
+}
+
+.custom-tabs .nav-link.active {
+    background: rgba(255,255,255,0.1);
+    color: var(--accent-color);
+}
+
+/* Dashboard specific */
+.dashboard-card {
+    transition: transform 0.3s ease;
+}
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+.chart-container {
+    height: 300px;
+    width: 100%;
+}

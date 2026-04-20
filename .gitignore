@@ -1,0 +1,22 @@
+# Node
+node_modules/
+npm-debug.log
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.pytest_cache/
+
+# Project specifics
+uploads/
+*.pdf
+models/*.pkl
+ml_service/*.pkl
+
+# OS
+.DS_Store
+Thumbs.db
